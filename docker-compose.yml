@@ -1,0 +1,45 @@
+
+version: '3.8'
+
+services:
+  mysql:
+    image: mysql:8.0.37
+    container_name: mysql-container
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: Chaitu@420
+      MYSQL_DATABASE: OAuth_1
+    ports:
+      - "3306:3306"
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - my-network
+
+  springboot:
+    image: app.jar:latest
+    container_name: springboot-container
+    restart: always
+    ports:
+      - "8082:8082"
+    environment:
+      SPRING_DATASOURCE_URL: jdbc:mysql://mysql:3306/OAuth_1
+      SPRING_DATASOURCE_USERNAME: root
+      SPRING_DATASOURCE_PASSWORD: Chaitu@420
+      SPRING_JPA_SHOW_SQL: true
+      SPRING_JPA_HIBERNATE_DDL_AUTO: update
+      SERVER_PORT: 8082
+    volumes:
+      - springboot-data:/Users/chaitanyanadagouda/desktop/new
+    depends_on:
+      - mysql
+    networks:
+      - my-network
+
+networks:
+  my-network:
+    driver: bridge
+
+volumes:
+  mysql-data:
+  springboot-data:
